@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link href="jQuery/css/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="css/kube.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="jQuery/js/jquery.js"></script>
+<script type="text/javascript" src="jQuery/js/jquery-ui.js"></script>
+
+<style type="text/css">
+	#shadow2 {
+		position: absolute;
+		height: 30px;
+		background-color: #A6A3A3;
+		z-index :10;
+		width: 100%;
+		opacity : 0.75;
+	}
+	
+	.selected {
+	border-color: black; 
+	border-style: solid;
+	 border-width: 1px; 
+	}
+	
+</style>
+<title>Experiment Drag and Drop</title>
+</head>
+<body>
+<div >
+	<div class="units-row" style="min-height: 500px;width:1000px; margin-left: auto;margin-right: auto; border-color: black;border-style: solid;border-width: 1px;">
+		<div class = "unit-30" style="min-height: 100px; border-color: pink;border-style: solid;border-width: 1px;">
+			<div class = "dragable" >Grag me</div>
+			<div class = "dragable" >Grag me</div>
+			<div class = "dragable" >Grag me</div>
+			<div class = "dragable" >Grag me</div>
+			<div class = "dragable" >Grag me</div>
+		</div>
+		
+		<div class = "unit-70" id = "dropDiv" style="min-height: 100px; border-color: pink;border-style: solid;border-width: 1px;">
+			
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(".dragable").draggable({
+	    appendTo: "body",
+	    helper: "clone"
+	  });
+  
+  $("#dropDiv").droppable({
+	  greedy: true,
+	  drop : function(event, ui){
+		  $("#yellowTempbox").remove();
+		  
+		  var tile = document.createElement("div");
+		  tile.setAttribute("class","tile units-row");
+		  tile.setAttribute("style", "position:relative;")
+		  
+		  var div = document.createElement("div");
+		  div.setAttribute("class","unit-50 selected one");
+		  
+		  var label = document.createElement("Label");
+		  label.innerHTML = "Label";
+		  div.appendChild(label);
+		  
+		  var input = document.createElement("input");
+		  input.setAttribute("type","text");
+		  div.appendChild(input);
+		  
+		  tile.appendChild(div);
+		  
+		  
+		  var emptyDiv = document.createElement("div");
+		  emptyDiv.setAttribute("style","height: 30px; ");
+		  emptyDiv.setAttribute("class","blankspace unit-50");
+		  tile.appendChild(emptyDiv);
+		  
+		  event.target.appendChild(tile);
+		  attach_drop_Event(emptyDiv);
+	  },
+	  out: function( event, ui ) {
+		  $("#yellowTempbox").remove();
+	  },
+	  over: function( event, ui ) {
+		  var tile = document.createElement("div");
+		  tile.setAttribute("id","yellowTempbox");
+		  tile.setAttribute("style", "border-color: yellow; border-style: solid; border-width: 1px;")
+		  
+		  var label = document.createElement("Label");
+		  label.innerHTML = "Label";
+		  tile.appendChild(label);
+		  
+		  var input = document.createElement("input");
+		  input.setAttribute("type","text");
+		  tile.appendChild(input);
+		  
+		  event.target.appendChild(tile);
+		  
+	  }
+  });
+  
+  function attach_drop_Event(emptyDiv){
+
+	  $(emptyDiv).droppable({
+		  greedy: true,
+		  out: function( event, ui ) {
+			  $("#yellowTempbox").remove();
+			  var elem = document.getElementById("shadow2");
+			  elem.parentNode.removeChild(elem);
+			 
+		  },
+		  over: function( event, ui ) {
+			 var bytwoDiv = document.createElement("div");
+			 bytwoDiv.setAttribute("id","shadow2");
+			 $(bytwoDiv).css("height", event.target.parentNode.clientHeight);
+			 event.target.parentNode.appendChild(bytwoDiv);
+			  $("#yellowTempbox").remove();
+			  
+		  },
+		  drop: function( event, ui ) {
+			  $("#yellowTempbox").remove();
+			  var elem = document.getElementById("shadow2");
+			  elem.parentNode.removeChild(elem);
+			 
+			  
+			  var secondColumn = document.createElement("div");
+			  secondColumn.setAttribute("class","unit-50 selected two");
+			  
+			  var label = document.createElement("Label");
+			  label.innerHTML = "Label";
+			  secondColumn.appendChild(label);
+			  
+			  var input = document.createElement("input");
+			  input.setAttribute("type","text");
+			  secondColumn.appendChild(input);
+			  
+			  event.target.parentNode.appendChild(secondColumn);
+			  
+			  var childToRemove = event.target.parentNode.getElementsByClassName("blankspace")[0];
+			  var parent = childToRemove.parentNode.removeChild(childToRemove);
+			 
+			  
+			  
+			 
+		  }
+		  
+	  });
+  } 
+  
+</script>
+</body>
+</html>
